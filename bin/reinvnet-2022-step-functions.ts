@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import {Reinvent2022StepFunctionsStack} from "../lib/reinvent-2022-step-functions-stack";
 import {Reinvent2022StepFunctionsResilienceStack} from "../lib/reinvent-2022-step-functions-resilience-stack";
+import {Reinvent2022StepFunctionsRetryAfterStack} from "../lib/reinvent-2022-step-functions-retry-after-stack";
 
 
 const app = new cdk.App();
@@ -25,5 +26,12 @@ new Reinvent2022StepFunctionsStack(app, 'Reinvent2022StepFunctionsStack', {
 
 new Reinvent2022StepFunctionsResilienceStack(app, 'Reinvent2022StepFunctionsResilienceStack', {
 
-    
-});
+
+})
+
+
+new Reinvent2022StepFunctionsRetryAfterStack(app, 'Reinvent2022StepFunctionsRetryAfterStack', {
+
+
+})
+

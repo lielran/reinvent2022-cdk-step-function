@@ -1,6 +1,6 @@
 import { Duration, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { StateMachine } from "aws-cdk-lib/aws-stepfunctions";
+import {Chain, StateMachine} from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -49,9 +49,16 @@ export class Reinvent2022StepFunctionsStack extends Stack {
     //     .when(sfn.Condition.stringEquals('$.status', 'SUCCEEDED'), finalStatus)
     //     .otherwise(waitX));
 
+    const chain = Chain.start(
+        flights).next(
+            hotel).next(
+                tickets).next(
+                    car);
+
+
     new StateMachine(this, "iterative-stateMachine", {
-      stateMachineName: "iterative-stateMachine",
-      definition: flights.next(hotel).next(tickets).next(car),
+      stateMachineName: "iterative-stateMachine-being-a-good-neighbour",
+      definition: chain ,
       timeout: Duration.minutes(5),
     });
 
