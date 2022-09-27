@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { Reinvnet2022StepFunctionsStack } from '../lib/reinvnet-2022-step-functions-stack';
+import {Reinvent2022StepFunctionsStack} from "../lib/reinvent-2022-step-functions-stack";
+import {Reinvent2022StepFunctionsResilienceStack} from "../lib/reinvent-2022-step-functions-resilience-stack";
+
 
 const app = new cdk.App();
-new Reinvnet2022StepFunctionsStack(app, 'Reinvnet2022StepFunctionsStack', {
+new Reinvent2022StepFunctionsStack(app, 'Reinvent2022StepFunctionsStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -18,4 +20,10 @@ new Reinvnet2022StepFunctionsStack(app, 'Reinvnet2022StepFunctionsStack', {
   // env: { account: '123456789012', region: 'us-east-1' },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+});
+
+
+new Reinvent2022StepFunctionsResilienceStack(app, 'Reinvent2022StepFunctionsResilienceStack', {
+
+    
 });
