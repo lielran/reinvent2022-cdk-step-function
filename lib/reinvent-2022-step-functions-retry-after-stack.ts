@@ -3,6 +3,7 @@ import {Construct} from "constructs";
 import {Choice, Condition, Pass, StateMachine, Wait, WaitTime} from "aws-cdk-lib/aws-stepfunctions";
 import {LambdaInvoke} from "aws-cdk-lib/aws-stepfunctions-tasks";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
+import {RetryProps} from "aws-cdk-lib/aws-stepfunctions/lib/types";
 
 
 export class Reinvent2022StepFunctionsRetryAfterStack extends Stack {
@@ -45,33 +46,29 @@ export class Reinvent2022StepFunctionsRetryAfterStack extends Stack {
         });
 
 
-        const definition = flights
-            .addRetry({
-                maxAttempts: 1,
-                backoffRate: 2,
-                //}).addCatch(this.getRateLimit(flights))
-            }).addCatch(this.getRateLimit(calculateRetryAfter, flights), {errors: ['TooManyRequests429']})
-            .next(
-                hotel.addRetry({
-                    maxAttempts: 1,
-                    backoffRate: 2,
+        // const connection = new events.Connection(this, 'Connection', {
+        //     authorization: events.Authorization.apiKey('x-api-key', SecretValue.secretsManager('ApiSecretName')),
+        //     description: 'Connection with API Key x-api-key',
+        // });
+        // const destination = new ApiDestination(this, 'Destination', {
+        //     connection,
+        //     endpoint: 'https://example.com',
+        //     description: 'Calling example.com with API key x-api-key',
+        // });
 
-                })
-                    .addCatch(this.getRateLimit(calculateRetryAfter, hotel), {errors: ['TooManyRequests429']})
-            )
-            .next(
-                tickets.addRetry({
-                    maxAttempts: 1,
-                    backoffRate: 2,
 
-                }).addCatch(this.getRateLimit(calculateRetryAfter, tickets), {errors: ['TooManyRequests429']})
-            )
-            .next(
-                car.addRetry({
-                    maxAttempts: 1,
-                    backoffRate: 2,
-                }).addCatch(this.getRateLimit(calculateRetryAfter, car), {errors: ['TooManyRequests429']})
-            );
+        const errorHandling :RetryProps= {
+            maxAttempts: 6,
+            backoffRate: 2,
+            errors: ["GeneralAPIError"]
+        };
+
+        const definition =
+            flights.addCatch(this.getRateLimit(calculateRetryAfter, flights), {errors: ['TooManyRequests429']}).addRetry(errorHandling)
+            .next(hotel.addCatch(this.getRateLimit(calculateRetryAfter, hotel), {errors: ['TooManyRequests429']}).addRetry(errorHandling))
+            .next(tickets.addCatch(this.getRateLimit(calculateRetryAfter, tickets), {errors: ['TooManyRequests429']}).addRetry(errorHandling))
+            .next(car.addCatch(this.getRateLimit(calculateRetryAfter, car), {errors: ['TooManyRequests429']}).addRetry(errorHandling));
+
         new StateMachine(this, "retry-after-stateMachine", {
             stateMachineName: "retry-after-stateMachine-being-a-good-neighbour",
             definition,
@@ -87,7 +84,7 @@ export class Reinvent2022StepFunctionsRetryAfterStack extends Stack {
         });
 
 
-        const wait = new Wait(this, `Wait For Trigger Time - ${otherwise.id}`, {
+        const wait = new Wait(this, `Wait For Retry-After - ${otherwise.id}`, {
             time: WaitTime.timestampPath('$.Payload.retryAfterDate'),
         });
 
