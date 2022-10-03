@@ -18,20 +18,17 @@ new Reinvent2022StepFunctionsStack(app, 'Reinvent2022StepFunctionsStack', {
 
   /* Uncomment the next line if you know exactly what Account and Region you
    * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+  env: { account: process.env.CDK_DEFAULT_ACCOUN, region: 'us-east-1' },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
 
 new Reinvent2022StepFunctionsResilienceStack(app, 'Reinvent2022StepFunctionsResilienceStack', {
-
-
+  env: { account: process.env.CDK_DEFAULT_ACCOUN, region: 'us-east-1' },
 })
 
 
 new Reinvent2022StepFunctionsRetryAfterStack(app, 'Reinvent2022StepFunctionsRetryAfterStack', {
-
-
+  env: { account: process.env.CDK_DEFAULT_ACCOUN, region: 'us-east-1' },
 })
-
