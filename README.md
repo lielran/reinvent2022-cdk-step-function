@@ -17,4 +17,5 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 * Install yarn `npm install --global yarn`
 * Make sure Docker is running
 * Run `yarn` to install packages
-* Run `yarn cdk deploy` to deploy the code
+* Run `yarn cdk bootstrap`
+* Run `yarn cdk deploy --all` to deploy the code
