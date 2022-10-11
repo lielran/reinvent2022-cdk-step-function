@@ -1,15 +1,19 @@
-function TooManyRequests429(message) {
-    this.name = "TooManyRequests429";
-    this.message = message;
+class TooManyRequests429 extends Error{
+    constructor(message: string) {
+        super(message);
+        this.name = "TooManyRequests429";
+        this.message = message;
+    }
 }
 
-function GeneralAPIError(message) {
-    this.name = "GeneralAPIError";
-    this.message = message;
+class GeneralAPIError extends Error{
+    constructor(message: string) {
+        super(message);
+        this.name = "GeneralAPIError";
+        this.message = message;
+    }
 }
 
-TooManyRequests429.prototype = new Error();
-GeneralAPIError.prototype = new Error();
 export const handler = async (event: any): Promise<any> => {
 
     const apiWorks = Math.random() >= 0.3; //70% probability of getting and error
