@@ -12,7 +12,11 @@ const app = new cdk.App();
 const apiDestinationStack = new ApiDestinationStack(
   app,
   "ApiDestinationStack",
-  "https://webhook.site/5a9edb27-f2fb-47d4-b6a5-ec84980d8064"
+  "https://webhook.site/5a9edb27-f2fb-47d4-b6a5-ec84980d8064",
+    {
+        env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: "us-east-1" },
+    }
+
 );
 
 new Reinvent2022StepFunctionsStack(
