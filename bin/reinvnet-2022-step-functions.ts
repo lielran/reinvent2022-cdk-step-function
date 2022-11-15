@@ -12,7 +12,7 @@ const app = new cdk.App();
 const apiDestinationStack = new ApiDestinationStack(
   app,
   "ApiDestinationStack",
-  "https://webhook.site/ab124c5b-8a86-4f70-9c7a-38f68ba2ef27"
+  "https://webhook.site/5a9edb27-f2fb-47d4-b6a5-ec84980d8064"
 );
 
 new Reinvent2022StepFunctionsStack(
